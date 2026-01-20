@@ -194,11 +194,11 @@ session_start();
             <form id="loginForm">
                 <div class="form-group">
                     <label>Email</label>
-                    <input type="email" id="loginEmail" required>
+                    <input type="email" id="loginEmail" autocomplete="email" required>
                 </div>
                 <div class="form-group">
                     <label>Wachtwoord</label>
-                    <input type="password" id="loginPassword" required>
+                    <input type="password" id="loginPassword" autocomplete="current-password" required>
                 </div>
                 <button type="submit" class="btn btn-primary">Inloggen</button>
             </form>
@@ -224,11 +224,11 @@ session_start();
                 </div>
                 <div class="form-group">
                     <label>Email</label>
-                    <input type="email" id="registerEmail" required>
+                    <input type="email" id="registerEmail" autocomplete="email" required>
                 </div>
                 <div class="form-group">
                     <label>Wachtwoord (minimaal 6 tekens)</label>
-                    <input type="password" id="registerPassword" required minlength="6">
+                    <input type="password" id="registerPassword" autocomplete="new-password" required minlength="6">
                 </div>
                 <button type="submit" class="btn btn-primary">Registreren</button>
             </form>

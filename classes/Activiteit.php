@@ -1,7 +1,8 @@
 <?php
-require_once __DIR__ . '/../config/database.php';
-require_once __DIR__ . '/BaseModel.php';
-require_once __DIR__ . '/Gebruiker.php';
+/**
+ * Activiteit Class
+ * Implementeert Validatable en Saveable interfaces via BaseModel
+ */
 
 /**
  * Activiteit Class
@@ -9,15 +10,15 @@ require_once __DIR__ . '/Gebruiker.php';
  * Erft van BaseModel (overerving)
  */
 class Activiteit extends BaseModel {
-    private $titel;
-    private $beschrijving;
-    private $datum;
-    private $tijd;
-    private $locatie;
-    private $soort;
-    private $status;
-    private $opmerkingen;
-    private $organisator_id;
+    public $titel;
+    public $beschrijving;
+    public $datum;
+    public $tijd;
+    public $locatie;
+    public $soort;
+    public $status;
+    public $opmerkingen;
+    public $organisator_id;
     
     public function __construct($id = null) {
         parent::__construct($id);
@@ -44,6 +45,14 @@ class Activiteit extends BaseModel {
             $this->opmerkingen = $data['opmerkingen'];
             $this->organisator_id = $data['organisator_id'];
         }
+    }
+    
+    /**
+     * Maak een nieuwe activiteit aan
+     * Implementeert de save() methode van de Saveable interface
+     */
+    public function save($data) {
+        return $this->aanmaken($data);
     }
     
     /**
@@ -89,6 +98,14 @@ class Activiteit extends BaseModel {
     
     /**
      * Werk een activiteit bij
+     * Implementeert de update() methode van de Saveable interface
+     */
+    public function update($data) {
+        return $this->bijwerken($data);
+    }
+    
+    /**
+     * Werk een activiteit bij
      */
     public function bijwerken($data) {
         if (!$this->id) {
@@ -124,6 +141,14 @@ class Activiteit extends BaseModel {
         }
         
         return ['success' => false, 'message' => 'Bijwerken mislukt'];
+    }
+    
+    /**
+     * Verwijder een activiteit
+     * Implementeert de delete() methode van de Saveable interface
+     */
+    public function delete() {
+        return $this->verwijderen();
     }
     
     /**
@@ -287,9 +312,9 @@ class Activiteit extends BaseModel {
     
     /**
      * Valideer activiteit data
-     * Implementeert abstracte methode van BaseModel
+     * Implementeert abstracte methode van BaseModel en Validatable interface
      */
-    protected function validate($data) {
+    public function validate($data) {
         $errors = [];
         
         if (empty($data['titel'])) {

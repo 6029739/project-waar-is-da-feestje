@@ -1,7 +1,7 @@
 <?php
 header('Content-Type: application/json');
-require_once __DIR__ . '/../classes/Activiteit.php';
-require_once __DIR__ . '/../classes/Gebruiker.php';
+// Laad autoloader (laadt automatisch alle classes)
+require_once __DIR__ . '/../config/autoload.php';
 
 // Check of gebruiker is ingelogd
 session_start();

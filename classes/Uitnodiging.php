@@ -1,19 +1,18 @@
 <?php
-require_once __DIR__ . '/../config/database.php';
-require_once __DIR__ . '/Activiteit.php';
+// Autoloading wordt geregeld door config/autoload.php
 
 /**
  * Uitnodiging Class
  * Beheert uitnodigingen voor gasten
  */
 class Uitnodiging {
-    private $id;
-    private $activiteit_id;
-    private $email;
-    private $token;
-    private $status;
-    private $uitgenodigd_door;
-    private $db;
+    public $id;
+    public $activiteit_id;
+    public $email;
+    public $token;
+    public $status;
+    public $uitgenodigd_door;
+    public $db;
     
     public function __construct($id = null) {
         $this->db = Database::getInstance()->getConnection();

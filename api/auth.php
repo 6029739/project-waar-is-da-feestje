@@ -18,7 +18,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 try {
-    require_once __DIR__ . '/../classes/Gebruiker.php';
+    // Laad autoloader (laadt automatisch alle classes)
+    require_once __DIR__ . '/../config/autoload.php';
     
     $method = $_SERVER['REQUEST_METHOD'];
     $action = $_GET['action'] ?? '';

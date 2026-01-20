@@ -4,7 +4,17 @@
  */
 class API {
     constructor() {
-        this.baseUrl = window.location.origin;
+        // Gebruik de volledige pathname om subdirectories te ondersteunen
+        // Bijvoorbeeld: /project waar is dat feetje/ -> /project waar is dat feetje
+        const pathname = window.location.pathname;
+        // Verwijder index.php of trailing slash en haal base path
+        let basePath = pathname.replace(/\/index\.php$/, '').replace(/\/$/, '');
+        // Als basePath leeg is, gebruik dan root
+        if (!basePath || basePath === '/') {
+            basePath = '';
+        }
+        this.baseUrl = window.location.origin + basePath;
+        console.log('API Base URL:', this.baseUrl); // Debug
     }
     
     /**
@@ -12,6 +22,10 @@ class API {
      */
     async request(endpoint, options = {}) {
         const url = `${this.baseUrl}/api/${endpoint}`;
+        
+        // Debug: log de URL (verwijder in productie)
+        console.log('API Request:', url);
+        
         const defaultOptions = {
             headers: {
                 'Content-Type': 'application/json',

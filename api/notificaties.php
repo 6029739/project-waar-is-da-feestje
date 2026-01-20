@@ -1,6 +1,7 @@
 <?php
 header('Content-Type: application/json');
-require_once __DIR__ . '/../classes/Notificatie.php';
+// Laad autoloader (laadt automatisch alle classes)
+require_once __DIR__ . '/../config/autoload.php';
 
 session_start();
 if (!isset($_SESSION['user_id'])) {

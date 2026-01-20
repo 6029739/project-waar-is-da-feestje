@@ -1,6 +1,8 @@
 <?php
-require_once __DIR__ . '/../config/database.php';
-require_once __DIR__ . '/BaseModel.php';
+/**
+ * Gebruiker Class
+ * Implementeert Validatable en Saveable interfaces via BaseModel
+ */
 
 /**
  * Gebruiker Class
@@ -8,10 +10,10 @@ require_once __DIR__ . '/BaseModel.php';
  * Erft van BaseModel (overerving)
  */
 class Gebruiker extends BaseModel {
-    private $voornaam;
-    private $achternaam;
-    private $email;
-    private $rol;
+    public $voornaam;
+    public $achternaam;
+    public $email;
+    public $rol;
     
     public function __construct($id = null) {
         parent::__construct($id);
@@ -160,10 +162,65 @@ class Gebruiker extends BaseModel {
     }
     
     /**
-     * Valideer gebruiker data
-     * Implementeert abstracte methode van BaseModel
+     * Sla gebruiker op (implementeert Saveable interface)
+     * Voor nieuwe gebruikers gebruik je de static registreer() methode
      */
-    protected function validate($data) {
+    public function save($data) {
+        return ['success' => false, 'message' => 'Gebruik Gebruiker::registreer() voor nieuwe gebruikers'];
+    }
+    
+    /**
+     * Update gebruiker (implementeert Saveable interface)
+     */
+    public function update($data) {
+        if (!$this->id) {
+            return ['success' => false, 'message' => 'Geen gebruiker geselecteerd'];
+        }
+        
+        // Valideer eerst
+        $errors = $this->validate($data);
+        if (!empty($errors)) {
+            return ['success' => false, 'message' => implode(', ', $errors)];
+        }
+        
+        $stmt = $this->db->prepare(
+            "UPDATE gebruikers SET 
+             voornaam = ?, achternaam = ?, email = ?
+             WHERE id = ?"
+        );
+        
+        $result = $stmt->execute([
+            $data['voornaam'] ?? $this->voornaam,
+            $data['achternaam'] ?? $this->achternaam,
+            $data['email'] ?? $this->email,
+            $this->id
+        ]);
+        
+        if ($result) {
+            $this->loadFromDatabase($this->id);
+            return ['success' => true];
+        }
+        
+        return ['success' => false, 'message' => 'Bijwerken mislukt'];
+    }
+    
+    /**
+     * Verwijder gebruiker (implementeert Saveable interface)
+     */
+    public function delete() {
+        if (!$this->id) {
+            return ['success' => false, 'message' => 'Geen gebruiker geselecteerd'];
+        }
+        
+        $stmt = $this->db->prepare("DELETE FROM gebruikers WHERE id = ?");
+        return ['success' => $stmt->execute([$this->id])];
+    }
+    
+    /**
+     * Valideer gebruiker data
+     * Implementeert abstracte methode van BaseModel en Validatable interface
+     */
+    public function validate($data) {
         $errors = [];
         
         if (empty($data['voornaam'])) {

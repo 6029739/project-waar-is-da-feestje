@@ -116,23 +116,35 @@ class ActiviteitManager {
         let weerHTML = '';
         if (activiteit.soort === 'buiten') {
             try {
+                console.log('Weer ophalen voor activiteit:', activiteit.id);
                 const weerResponse = await this.api.getWeer(activiteit.id);
+                console.log('Weer response:', weerResponse);
+                
                 if (weerResponse.success && weerResponse.weer) {
                     const weer = weerResponse.weer;
-                    weerHTML = `
-                        <div class="weer-info">
-                            <h4>🌤️ Weersinformatie</h4>
-                            <p><strong>${weer.beschrijving}</strong></p>
-                            <div class="weer-details">
-                                <div>🌡️ Temperatuur: ${weer.temperatuur}°C</div>
-                                <div>💨 Wind: ${weer.wind} m/s</div>
-                                <div>💧 Vochtigheid: ${weer.vochtigheid}%</div>
+                    // Controleer of alle data aanwezig is
+                    if (weer.temperatuur !== null && weer.temperatuur !== undefined) {
+                        weerHTML = `
+                            <div class="weer-info" style="background: #f0f8ff; padding: 1rem; border-radius: 0.5rem; margin: 1rem 0;">
+                                <h4>🌤️ Weersinformatie voor ${activiteit.locatie}</h4>
+                                ${weer.icon ? `<img src="http://openweathermap.org/img/wn/${weer.icon}@2x.png" alt="Weer" style="float: right;">` : ''}
+                                ${weer.beschrijving ? `<p><strong>${weer.beschrijving}</strong></p>` : ''}
+                                <div class="weer-details" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.5rem; margin-top: 0.5rem;">
+                                    ${weer.temperatuur !== null ? `<div>🌡️ <strong>Temperatuur:</strong> ${Math.round(weer.temperatuur)}°C</div>` : ''}
+                                    ${weer.wind !== null ? `<div>💨 <strong>Wind:</strong> ${weer.wind} m/s</div>` : ''}
+                                    ${weer.vochtigheid !== null ? `<div>💧 <strong>Vochtigheid:</strong> ${weer.vochtigheid}%</div>` : ''}
+                                </div>
                             </div>
-                        </div>
-                    `;
+                        `;
+                    } else {
+                        weerHTML = '<p class="message message-warning">⚠️ Weerdata ontbreekt. Probeer het later opnieuw.</p>';
+                    }
+                } else {
+                    weerHTML = `<p class="message message-warning">⚠️ ${weerResponse.message || 'Kon weerinformatie niet laden.'}</p>`;
                 }
             } catch (error) {
-                weerHTML = '<p class="message message-error">Kon weerinformatie niet laden. Zorg dat je een geldige API key hebt ingesteld.</p>';
+                console.error('Weer API error:', error);
+                weerHTML = `<p class="message message-error">❌ Kon weerinformatie niet laden: ${error.message || 'Onbekende fout'}. Controleer of de API key geldig is.</p>`;
             }
         }
         

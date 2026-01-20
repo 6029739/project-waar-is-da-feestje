@@ -1,12 +1,12 @@
 <?php
-require_once __DIR__ . '/../config/database.php';
+// Autoloading wordt geregeld door config/autoload.php
 
 /**
  * Notificatie Class
  * Beheert notificaties voor gebruikers
  */
 class Notificatie {
-    private $db;
+    public $db;
     
     public function __construct() {
         $this->db = Database::getInstance()->getConnection();

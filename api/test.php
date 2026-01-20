@@ -3,9 +3,8 @@
 header('Content-Type: application/json; charset=utf-8');
 
 try {
-    require_once __DIR__ . '/../config/database.php';
-    require_once __DIR__ . '/../classes/BaseModel.php';
-    require_once __DIR__ . '/../classes/Gebruiker.php';
+    // Laad autoloader (laadt automatisch alle classes)
+    require_once __DIR__ . '/../config/autoload.php';
     
     // Test database connectie
     $db = Database::getInstance()->getConnection();

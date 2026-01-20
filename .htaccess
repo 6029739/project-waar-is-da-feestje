@@ -1,7 +1,15 @@
 # Enable rewrite engine
 RewriteEngine On
 
-# Redirect to index.php if file doesn't exist
+# Laat API directory volledig door (belangrijk voor Laragon)
+RewriteRule ^api/ - [L]
+
+# Laat alle bestaande bestanden en directories door
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Redirect to index.php alleen als bestand/directory niet bestaat
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ index.php [QSA,L]
